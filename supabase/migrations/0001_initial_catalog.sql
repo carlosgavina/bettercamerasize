@@ -200,11 +200,26 @@ create table catalog.lens_mounts (
   unique (lens_product_id, mount_id)
 );
 
+create table catalog.mount_conversions (
+  id uuid primary key default gen_random_uuid(),
+  body_mount_id uuid not null references catalog.mounts(id) on delete restrict,
+  lens_mount_id uuid not null references catalog.mounts(id) on delete restrict,
+  theoretical_extension_mm numeric(8,2),
+  mechanically_possible boolean not null default true,
+  optics_required boolean not null default false,
+  preserves_infinity_focus boolean,
+  preferred_display_name text,
+  metadata jsonb not null default '{}'::jsonb,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (body_mount_id, lens_mount_id)
+);
+
 create table catalog.adapter_specs (
   product_id uuid primary key references catalog.products(id) on delete cascade,
   adapter_type text not null check (adapter_type in ('mechanical', 'electronic', 'optical', 'teleconverter', 'speed_booster')),
-  adds_length_mm numeric(8,2) not null default 0,
-  adds_weight_g numeric(8,2) not null default 0,
+  adds_length_mm numeric(8,2),
+  adds_weight_g numeric(8,2),
   focal_length_multiplier numeric(8,4) not null default 1,
   aperture_multiplier numeric(8,4) not null default 1,
   crop_factor numeric(8,4) not null default 1,
@@ -220,10 +235,17 @@ create table catalog.adapter_specs (
 create table catalog.adapter_mount_edges (
   id uuid primary key default gen_random_uuid(),
   adapter_product_id uuid not null references catalog.products(id) on delete cascade,
-  body_mount_id uuid not null references catalog.mounts(id) on delete restrict,
-  lens_mount_id uuid not null references catalog.mounts(id) on delete restrict,
+  mount_conversion_id uuid not null references catalog.mount_conversions(id) on delete cascade,
   created_at timestamptz not null default now(),
-  unique (adapter_product_id, body_mount_id, lens_mount_id)
+  unique (adapter_product_id, mount_conversion_id)
+);
+
+create table catalog.mount_conversion_defaults (
+  mount_conversion_id uuid primary key references catalog.mount_conversions(id) on delete cascade,
+  default_adapter_product_id uuid not null references catalog.products(id) on delete restrict,
+  notes text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
 );
 
 create table ingest.source_records (
@@ -288,11 +310,14 @@ create index body_mounts_mount_idx
 create index lens_mounts_mount_idx
   on catalog.lens_mounts (mount_id);
 
-create index adapter_mount_edges_body_mount_idx
-  on catalog.adapter_mount_edges (body_mount_id);
+create index mount_conversions_body_mount_idx
+  on catalog.mount_conversions (body_mount_id);
 
-create index adapter_mount_edges_lens_mount_idx
-  on catalog.adapter_mount_edges (lens_mount_id);
+create index mount_conversions_lens_mount_idx
+  on catalog.mount_conversions (lens_mount_id);
+
+create index adapter_mount_edges_conversion_idx
+  on catalog.adapter_mount_edges (mount_conversion_id);
 
 create index observed_facts_product_field_idx
   on ingest.observed_facts (product_id, field_path);
@@ -332,10 +357,39 @@ create trigger lenses_set_updated_at
 before update on catalog.lenses
 for each row execute function public.set_updated_at();
 
+create trigger mount_conversions_set_updated_at
+before update on catalog.mount_conversions
+for each row execute function public.set_updated_at();
+
 create trigger adapter_specs_set_updated_at
 before update on catalog.adapter_specs
+for each row execute function public.set_updated_at();
+
+create trigger mount_conversion_defaults_set_updated_at
+before update on catalog.mount_conversion_defaults
 for each row execute function public.set_updated_at();
 
 create trigger product_assets_set_updated_at
 before update on catalog.product_assets
 for each row execute function public.set_updated_at();
+
+grant usage on schema catalog to service_role;
+grant usage on schema ingest to service_role;
+
+grant select, insert, update, delete on all tables in schema catalog to service_role;
+grant select, insert, update, delete on all tables in schema ingest to service_role;
+
+grant usage, select on all sequences in schema catalog to service_role;
+grant usage, select on all sequences in schema ingest to service_role;
+
+alter default privileges in schema catalog
+grant select, insert, update, delete on tables to service_role;
+
+alter default privileges in schema ingest
+grant select, insert, update, delete on tables to service_role;
+
+alter default privileges in schema catalog
+grant usage, select on sequences to service_role;
+
+alter default privileges in schema ingest
+grant usage, select on sequences to service_role;

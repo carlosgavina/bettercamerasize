@@ -7,8 +7,18 @@
     "dev": "turbo dev",
     "lint": "turbo lint",
     "test": "turbo test",
-    "db:lint": "supabase db lint",
-    "db:reset": "supabase db reset"
+    "studio:dev": "pnpm --filter @better-camera-size/studio dev",
+    "studio:build": "pnpm --filter @better-camera-size/studio build",
+    "studio:lint": "pnpm --filter @better-camera-size/studio lint",
+    "studio:typecheck": "pnpm --filter @better-camera-size/studio exec tsc --noEmit",
+    "studio:env:local": "node ./scripts/write-studio-env-local.mjs",
+    "studio:local:prepare": "pnpm db:start && pnpm db:reset && pnpm studio:env:local",
+    "db:start": "npx supabase@2.95.5 start",
+    "db:stop": "npx supabase@2.95.5 stop",
+    "db:status": "npx supabase@2.95.5 status",
+    "db:env": "npx supabase@2.95.5 status -o env",
+    "db:lint": "npx supabase@2.95.5 db lint",
+    "db:reset": "npx supabase@2.95.5 db reset"
   },
   "devDependencies": {
     "turbo": "^2.5.0"

@@ -143,6 +143,16 @@ Example:
 
 This is why adapters should not be modeled as a string field on lenses or bodies.
 
+For user experience, the system should also support a generic conversion choice such as:
+
+- `Leica M -> Leica L adapter`
+- `Leica M -> Nikon Z adapter`
+
+That generic choice should resolve to:
+
+- a mount-conversion record for compatibility logic
+- a default real adapter product for measurements, weight, and rendering
+
 ## Rendering Model
 
 Each renderable asset should be treated as calibrated geometry plus pixels:

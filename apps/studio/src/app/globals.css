@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f5f2ec;
+  --foreground: #17191b;
+  --surface: #fffdf9;
+  --surface-strong: #ece7df;
+  --border: #d6cec3;
+  --muted: #5b636b;
+  --accent: #c96b2c;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-strong: var(--surface-strong);
+  --color-border: var(--border);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-ink: var(--foreground);
+  --color-panel: color-mix(in srgb, var(--surface) 85%, white 15%);
+  --color-panel-strong: color-mix(in srgb, var(--surface-strong) 88%, white 12%);
+  --font-sans: var(--font-manrope);
+  --font-mono: var(--font-ibm-plex-sans);
+  --font-display: var(--font-instrument-serif);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-manrope), sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.panel {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 20px;
+  padding: 1.25rem;
+}
+
+.field {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--foreground);
+  border-radius: 14px;
+  padding: 0.875rem 1rem;
+  font: inherit;
+}
+
+.eyebrow {
+  color: var(--muted);
+  font-family: var(--font-ibm-plex-sans), sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+select.field {
+  appearance: none;
+}

@@ -14,7 +14,18 @@ This project is only as good as its catalog quality, compatibility logic, and ca
 
 If a tradeoff appears between speed and catalog trust, bias toward trust.
 
-## 2. Reuse Before Adding
+## 2. Prefer Stable Local Infrastructure Rules
+
+Local development should be deterministic.
+
+- keep a canonical local port map in the repo
+- avoid ad hoc port changes
+- do not hardcode local backend URLs into app code
+- prefer one documented startup path over improvisation
+
+The system must be testable locally before deployment becomes part of the workflow.
+
+## 3. Reuse Before Adding
 
 Before creating a new component, helper, token, or service:
 
@@ -28,7 +39,7 @@ Default ladder:
 - app-level wrapper
 - new shared primitive only when multiple consumers truly need it
 
-## 3. Parent Owns Layout
+## 4. Parent Owns Layout
 
 Reusable children should not silently own page layout.
 
@@ -47,7 +58,7 @@ Children define:
 
 This matters especially for search rows, inspector panels, cards, and comparison control groups.
 
-## 4. Do Not Guess Contracts
+## 5. Do Not Guess Contracts
 
 Before changing database, API, event, or storage behavior:
 
@@ -57,7 +68,7 @@ Before changing database, API, event, or storage behavior:
 
 Confident guessing is one of the fastest ways to poison catalog integrity.
 
-## 5. Make Compatibility Explicit
+## 6. Make Compatibility Explicit
 
 Do not hide compatibility behavior in string conventions or UI-only logic.
 
@@ -67,7 +78,7 @@ Do not hide compatibility behavior in string conventions or UI-only logic.
 
 If something is "temporarily supported", document what removes the temporary rule.
 
-## 6. Keep Source Data Separate From Published Data
+## 7. Keep Source Data Separate From Published Data
 
 Automation should not write straight into the trusted catalog.
 
@@ -77,7 +88,7 @@ Automation should not write straight into the trusted catalog.
 
 This separation is required for re-runs, audits, and conflict review.
 
-## 7. Security Defaults Must Be Intentional
+## 8. Security Defaults Must Be Intentional
 
 - keep secrets in environment variables or secret managers
 - validate authorization server-side
@@ -86,7 +97,7 @@ This separation is required for re-runs, audits, and conflict review.
 
 This applies to crawl jobs, storage access, internal tools, and any future community submission flows.
 
-## 8. Verify Narrowly But Realistically
+## 9. Verify Narrowly But Realistically
 
 Do not stop at "the code looks right".
 
@@ -100,7 +111,7 @@ Run the narrowest useful verification for the change:
 
 If a change can fail visually and logically, test both.
 
-## 9. Prefer Small Operational Entry Points
+## 10. Prefer Small Operational Entry Points
 
 Repeated workflows should become scripts or documented commands.
 
@@ -115,7 +126,7 @@ Strong candidates:
 
 Local improvisation is the enemy of repeatable debugging.
 
-## 10. Keep Docs In The Same Change Loop
+## 11. Keep Docs In The Same Change Loop
 
 When changing architecture, startup flow, contracts, or workflow:
 
@@ -124,14 +135,14 @@ When changing architecture, startup flow, contracts, or workflow:
 
 The repo should accumulate stable lessons, not force people to recover them from chat history.
 
-## 11. Optimize For Surgical Changes
+## 12. Optimize For Surgical Changes
 
 - solve the requested problem with the minimum credible change
 - do not refactor unrelated areas opportunistically
 - match the surrounding style unless there is a concrete reason not to
 - clean up only the mess introduced by your own change unless explicitly asked
 
-## 12. Use Goal-Driven Execution
+## 13. Use Goal-Driven Execution
 
 Turn work into small verifiable outcomes.
 

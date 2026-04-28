@@ -70,13 +70,35 @@ Lens-specific optical and physical properties.
 
 Mounts that a lens can attach through natively.
 
+### `catalog.mount_conversions`
+
+Generic mount-pair conversions.
+
+This is the layer that powers simple UX choices like:
+
+- "Leica M to Leica L adapter"
+- "Leica M to Nikon Z adapter"
+
+It captures the theoretical or canonical conversion between a body-side mount and a lens-side mount.
+
+### `catalog.mount_conversion_defaults`
+
+Maps a generic mount conversion to the preferred default adapter product.
+
+This lets the UI stay simple while still resolving to a real adapter for:
+
+- dimensions
+- weight
+- rendering
+- source-backed product metadata
+
 ### `catalog.adapter_specs`
 
 Adapter-specific physical and functional properties.
 
 ### `catalog.adapter_mount_edges`
 
-Directed compatibility edges from body-side mount to lens-side mount.
+Links a real adapter product to one or more mount conversions.
 
 This is the key table for resolving questions like:
 
@@ -164,9 +186,10 @@ The key domain behavior is relational and graph-shaped. The database should own 
 To resolve reachable lens mounts for a selected body:
 
 1. read the body's native mounts from `catalog.body_mounts`
-2. recursively traverse `catalog.adapter_mount_edges`
-3. collect reachable lens-side mounts
-4. join against `catalog.lens_mounts`
-5. apply extra filters for image coverage, autofocus support, or optical behavior
+2. collect matching generic conversions from `catalog.mount_conversions`
+3. optionally resolve a default adapter from `catalog.mount_conversion_defaults`
+4. collect reachable lens-side mounts
+5. join against `catalog.lens_mounts`
+6. apply extra filters for image coverage, autofocus support, or optical behavior
 
 That query pattern is why the mount graph belongs in Postgres.

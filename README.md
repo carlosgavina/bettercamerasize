@@ -22,11 +22,22 @@ The first pass in this repository establishes:
 - an initial Supabase/Postgres schema
 - the separation between source ingestion, reviewed catalog data, and calibrated render assets
 
+## Local Start
+
+The current implementation target is `apps/studio` against the local Supabase stack.
+
+```bash
+pnpm studio:local:prepare
+pnpm studio:dev
+```
+
 ## Docs
 
 - [Architecture](./docs/architecture.md)
 - [Database Schema](./docs/database-schema.md)
 - [Delivery Roadmap](./docs/delivery-roadmap.md)
+- [Kickoff Decisions](./docs/kickoff-decisions.md)
+- [Local Development](./docs/local-development.md)
 - [Engineering Guardrails](./docs/conventions/ENGINEERING_GUARDRAILS.md)
 - [Design System Notes](./docs/design-system.md)
 - [Shared DESIGN.md](./DESIGN.md)
