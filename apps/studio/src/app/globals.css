@@ -1,13 +1,15 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f5f2ec;
-  --foreground: #17191b;
-  --surface: #fffdf9;
-  --surface-strong: #ece7df;
-  --border: #d6cec3;
-  --muted: #5b636b;
-  --accent: #c96b2c;
+  --background: #0b0b0b;
+  --foreground: #ffffff;
+  --surface: #151515;
+  --surface-strong: #212121;
+  --border: #353535;
+  --muted: #b9b9b9;
+  --accent: #0052ef;
+  --danger: #dd0000;
+  --success: #37cd84;
 }
 
 @theme inline {
@@ -18,9 +20,11 @@
   --color-border: var(--border);
   --color-muted: var(--muted);
   --color-accent: var(--accent);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
   --color-ink: var(--foreground);
-  --color-panel: color-mix(in srgb, var(--surface) 85%, white 15%);
-  --color-panel-strong: color-mix(in srgb, var(--surface-strong) 88%, white 12%);
+  --color-panel: var(--surface);
+  --color-panel-strong: var(--surface-strong);
   --font-sans: var(--font-manrope);
   --font-mono: var(--font-ibm-plex-sans);
   --font-display: var(--font-instrument-serif);
@@ -39,18 +43,28 @@ body {
 .panel {
   border: 1px solid var(--border);
   background: var(--surface);
-  border-radius: 20px;
+  border-radius: 8px;
   padding: 1.25rem;
 }
 
 .field {
   width: 100%;
   border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--foreground);
-  border-radius: 14px;
-  padding: 0.875rem 1rem;
+  background: var(--background);
+  color: var(--muted);
+  border-radius: 3px;
+  padding: 0.625rem 0.75rem;
   font: inherit;
+  font-size: 0.875rem;
+}
+
+.field:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.field::placeholder {
+  color: #797979;
 }
 
 .eyebrow {
@@ -58,7 +72,6 @@ body {
   font-family: var(--font-ibm-plex-sans), sans-serif;
   font-size: 0.72rem;
   font-weight: 600;
-  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Sans, Instrument_Serif, Manrope } from "next/font/google";
+import { StudioShell } from "@/components/studio-shell";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -34,7 +35,9 @@ export default function RootLayout({
       lang="en"
       className={`${manrope.variable} ${ibmPlexSans.variable} ${instrumentSerif.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full">
+        <StudioShell>{children}</StudioShell>
+      </body>
     </html>
   );
 }

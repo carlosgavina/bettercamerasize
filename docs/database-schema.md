@@ -17,6 +17,7 @@ This should stay flexible without becoming shapeless.
 3. Model compatibility with directed mount edges.
 4. Treat image calibration metadata as first-class schema, not as ad hoc blob fields.
 5. Avoid premature user-centric tables until the catalog model is stable.
+6. Treat queryable visual variants as first-class asset fields when they affect rendering or filtering.
 
 ## Main Schemas
 
@@ -108,7 +109,17 @@ This is the key table for resolving questions like:
 
 ### `catalog.product_assets`
 
-Render-ready asset metadata, including calibration fields like `pixels_per_mm` and mount anchors.
+Render-ready asset metadata, including calibration fields like `pixels_per_mm`, mount anchors, and lens-specific visual configuration such as hood state.
+
+Important details:
+
+- hood state belongs on the asset, not the lens, because the same lens can have multiple valid render assets for the same view
+- `lens_hood_state` should distinguish at least:
+  - `with_hood`
+  - `without_hood`
+  - `unknown` for unreviewed lens assets
+  - `not_applicable` for non-lens assets
+- uniqueness should include hood state so the catalog can store both hooded and non-hooded variants for the same lens view
 
 ## Provenance Tables
 
@@ -142,6 +153,7 @@ Bad candidates:
 - focal length
 - aperture
 - asset calibration anchors
+- hooded vs non-hooded render state when it affects which asset should be selected
 
 If a field drives filtering, comparison, compatibility, or layout, it should not be trapped in `jsonb`.
 

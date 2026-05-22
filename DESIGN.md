@@ -1,161 +1,154 @@
 ---
 version: alpha
-name: Better Camera Size Foundation
-description: Shared visual foundation for the public comparison app and the internal studio app.
+name: Better Camera Size Dark Precision System
+description: Shared visual direction for the public comparison app and the internal Studio, inspired by dark structured-content tooling.
 colors:
-  primary: "#111315"
-  secondary: "#5B636B"
-  tertiary: "#C96B2C"
-  neutral: "#F5F2EC"
-  surface: "#FFFDF9"
-  surface-muted: "#ECE7DF"
-  on-surface: "#17191B"
-  border: "#D6CEC3"
-  success: "#2F6B53"
-  danger: "#9C3A2D"
+  canvas: "#0B0B0B"
+  surface: "#151515"
+  surface-raised: "#212121"
+  border: "#353535"
+  text-primary: "#FFFFFF"
+  text-secondary: "#B9B9B9"
+  text-muted: "#797979"
+  accent-blue: "#0052EF"
+  accent-coral: "#F36458"
+  success: "#37CD84"
+  danger: "#DD0000"
 typography:
-  display-lg:
-    fontFamily: "Instrument Serif"
+  display:
+    fontFamily: "Manrope"
     fontSize: 48px
-    fontWeight: 400
-    lineHeight: 1.02
-    letterSpacing: -0.02em
-  headline-md:
+    fontWeight: 600
+    lineHeight: 1.05
+    letterSpacing: 0
+  headline:
     fontFamily: "Manrope"
     fontSize: 28px
-    fontWeight: 700
-    lineHeight: 1.1
-    letterSpacing: -0.02em
-  body-md:
+    fontWeight: 600
+    lineHeight: 1.15
+    letterSpacing: 0
+  body:
     fontFamily: "Manrope"
     fontSize: 16px
     fontWeight: 500
-    lineHeight: 1.55
-  label-sm:
+    lineHeight: 1.5
+    letterSpacing: 0
+  label:
     fontFamily: "IBM Plex Sans"
     fontSize: 12px
     fontWeight: 600
     lineHeight: 1.2
-    letterSpacing: 0.08em
+    letterSpacing: 0
 rounded:
-  sm: 6px
-  md: 12px
-  lg: 20px
-  full: 9999px
+  input: 3px
+  control: 5px
+  panel: 6px
+  overlay: 12px
+  pill: 99999px
 spacing:
+  hairline: 1px
   xs: 4px
   sm: 8px
   md: 16px
   lg: 24px
-  xl: 40px
-  stage-gap: 32px
+  xl: 32px
 components:
   button-primary:
-    backgroundColor: "{colors.primary}"
-    textColor: "{colors.surface}"
-    rounded: "{rounded.full}"
-    padding: 12px
-  button-secondary:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.primary}"
-    rounded: "{rounded.full}"
-    padding: 12px
-  card-default:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.on-surface}"
-    rounded: "{rounded.md}"
-    padding: 16px
+    backgroundColor: "{colors.text-primary}"
+    textColor: "{colors.canvas}"
+    rounded: "{rounded.control}"
+    hoverBackgroundColor: "{colors.accent-blue}"
+    hoverTextColor: "{colors.text-primary}"
+  button-danger:
+    backgroundColor: "{colors.danger}"
+    textColor: "{colors.text-primary}"
+    rounded: "{rounded.control}"
   input-default:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.text-secondary}"
+    borderColor: "{colors.surface-raised}"
+    rounded: "{rounded.input}"
+  panel-default:
     backgroundColor: "{colors.surface}"
-    textColor: "{colors.on-surface}"
-    rounded: "{rounded.sm}"
-    padding: 12px
+    borderColor: "{colors.border}"
+    rounded: "{rounded.panel}"
 ---
 
 ## Overview
 
-Better Camera Size should feel precise, editorial, and mechanically trustworthy.
+Better Camera Size should feel like a precise instrument panel for physical comparison.
+The visual system uses a near-black canvas, pure grayscale surfaces, compact controls, and vivid accent states. Product imagery and measured compatibility remain the focus; the interface should feel structured, fast, and technically credible.
 
-This is not a glossy gadget storefront. It is a measurement-oriented product where the visual layer has to support trust in scale, compatibility, and detail. The UI should feel modern and intentional, but not ornamental for its own sake.
+The public app and Studio share the same foundation, but not the same density:
 
-The public app and the studio app share the same foundational language:
+- The public app can use larger staging, more atmosphere, and more visual drama around comparison scenes.
+- Studio should feel like a dark operations console: dense, direct, and designed for repeated catalog work.
 
-- high-contrast typography
-- warm neutrals instead of sterile pure white
-- restrained accent usage
-- strong emphasis on image stage clarity
-- dense information without cramped layout
+## Color Rules
 
-The two app surfaces should diverge in tone:
+Use an achromatic dark palette as the primary identity:
 
-- the public app may be more expressive and atmospheric
-- the studio app should be quieter, denser, and more operational
+- `#0B0B0B` is the canvas.
+- `#151515` and `#212121` are working surfaces.
+- `#353535` is the main separator and containment color.
+- `#FFFFFF`, `#B9B9B9`, and `#797979` form the text hierarchy.
+- `#0052EF` is the consistent hover/focus/active signal.
+- `#F36458` is reserved for rare high-emphasis action moments.
 
-## Colors
+Avoid warm beige surfaces, purple gradients, glass effects, and decorative backgrounds in Studio.
 
-The palette is built around warm neutrals, dark ink tones, and a single copper accent.
+## Typography Rules
 
-- **Primary:** Use for the main text, key controls, and strong framing elements.
-- **Secondary:** Use for metadata, dividers, and less prominent supporting text.
-- **Tertiary:** Use sparingly for the most important actions, focused states, and notable callouts.
-- **Neutral and Surface:** Use to keep the UI calm and photographic assets readable without the coldness of pure grayscale.
-- **Border:** Use for separators and input boundaries instead of heavy shadows.
+Use compact sans-serif typography for product and catalog work.
 
-The accent color should not dominate the interface. Product imagery and relative scale are the focus, not the chrome around them.
+- Studio headings should be compact and functional.
+- Labels and metadata should use the technical font register.
+- Letter spacing in implementation should stay neutral.
+- Body text should be readable at operational density.
 
-## Typography
+The referenced Sanity design uses a custom display face and aggressive negative tracking. We are not adopting those exact details because our UI must remain practical, stable, and compatible with project layout guardrails.
 
-Typography should balance measurement precision with editorial quality.
+## Layout Rules
 
-- **Display:** Serif display type is allowed only for large landing moments, headings, and hero statements in the public app.
-- **Headlines and body:** Sans-serif should carry most product UI, search results, filters, and data-heavy surfaces.
-- **Labels:** Labels, dimensions, and micro-metadata should feel instrument-like and compact.
+Studio is an application shell, not a marketing page.
 
-Readability matters more than typographic novelty. The studio app should bias toward speed and scanning.
+- Use a persistent left sidebar.
+- Each route has a compact top bar.
+- Resource pages use list/detail panes.
+- Panes fill available height and scroll internally.
+- Add/create flows open in modals.
+- Use separators and tonal surfaces instead of stacked cards.
 
-## Layout
+The public comparison app should still protect a large visual stage for camera/lens scale rendering.
 
-Layouts should be built around a clean stage-and-panel model.
+## Component Rules
 
-- Comparison scenes need generous protected space around the products.
-- Filters, selectors, and metadata should live in predictable side or lower panels instead of floating arbitrarily.
-- Mobile layouts should prioritize vertical flow and deliberate sectional collapse instead of miniature desktop replicas.
-- Use the spacing scale consistently; if a layout exception appears repeatedly, it should become a named token or component rule.
+Controls should be systematic and quiet:
 
-## Elevation & Depth
+- Inputs: near-black background, subtle border, small radius.
+- Buttons: compact, direct, and high contrast.
+- Primary actions may use white-on-dark or blue hover states.
+- Dialogs: dense, scrollable, with clear footer actions.
+- Lists: row-based with separators, not card grids.
+- Details: large working pane with section dividers.
 
-Depth should come from tonal contrast, borders, and layering before shadows.
+## Asset And Renderer Rules
 
-Use soft elevation for overlays, floating controls, and dialogs, but avoid shadow-heavy interfaces. The comparison stage should remain visually crisp and flat enough that object boundaries and scale feel reliable.
+Product imagery must remain visually inspectable:
 
-## Shapes
+- Do not bury images in decorative frames.
+- Avoid heavy shadows or effects around cutouts.
+- Use dark surfaces that let transparent PNG/WebP boundaries remain readable.
+- Calibration metadata, hood state, and view state should be visible in Studio review flows.
 
-The shape language should feel engineered, not bubbly.
+## Do And Do Not
 
-- Inputs and utility surfaces use small to medium radius.
-- Larger cards may use the medium radius for a softer, contemporary feel.
-- Primary actions can be pill-shaped when they benefit from a strong, singular call-to-action treatment.
-
-Do not mix sharp and very rounded surfaces randomly.
-
-## Components
-
-Components should feel systematic and quiet.
-
-- Buttons should be bold but not oversized.
-- Cards should frame controls and metadata without competing with the comparison stage.
-- Inputs should read as instrument panels more than marketing forms.
-- Dialogs and drawers should feel dense and operational, especially in studio.
-
-The comparison renderer itself is not a generic card grid. It is a specialized stage and should be treated as a product-specific visual system with its own stricter layout rules.
-
-## Do's and Don'ts
-
-- Do keep the product imagery as the visual focal point.
-- Do use the accent color sparingly and semantically.
-- Do preserve strong contrast and information hierarchy.
-- Do let the public app feel more expressive than the studio app.
-- Don't make the studio app look like a marketing site.
-- Don't rely on generic SaaS gradients or purple-on-white defaults.
-- Don't use oversized shadows, glassmorphism, or decorative effects that weaken measurement trust.
-- Don't crowd the comparison stage with unnecessary interface chrome.
+- Do make Studio feel like a professional catalog operations app.
+- Do use full-height panes and internal scrolling.
+- Do keep interaction states consistent and obvious.
+- Do use blue as the active/focus signal.
+- Do preserve high contrast.
+- Do not use oversized cards for page sections.
+- Do not make the admin feel like a landing page.
+- Do not use warm neutral themes in Studio.
+- Do not add decorative gradients, blurred blobs, or generic SaaS chrome.

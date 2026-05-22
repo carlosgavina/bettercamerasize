@@ -159,6 +159,7 @@ Each renderable asset should be treated as calibrated geometry plus pixels:
 
 - transparent image
 - known view angle: front, rear, top, left, right
+- visual configuration state when relevant, for example lens with hood vs without hood
 - pixels-per-mm scale
 - mount-center anchor
 - baseline anchor
@@ -168,6 +169,7 @@ That allows the app to:
 - place two bodies side by side accurately
 - attach a lens to the correct mount location
 - apply adapter chain length and weight
+- choose the correct lens variant when only hood-on or hood-off imagery exists
 - swap between front, rear, and top views without inventing fake proportions
 
 ## Data Freshness Strategy

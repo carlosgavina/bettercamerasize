@@ -44,6 +44,21 @@ It should not yet be treated as:
 4. `apps/web` and `apps/studio`
    App-specific composition, density, and interaction design.
 
+## Current Direction
+
+We are adopting the dark precision direction captured in `DESIGN.md`.
+
+The practical interpretation is:
+
+- near-black canvas as the default product and Studio environment
+- pure grayscale surfaces and separators
+- compact app-shell layouts for Studio
+- blue as the consistent focus, hover, and active signal
+- coral/red only for rare high-emphasis or destructive moments
+- list/detail pages and modal create flows for Studio resources
+
+The reference design uses a custom typeface and aggressive negative tracking. We are not adopting those exact typographic details; implementation should keep letter spacing neutral for layout stability and readability.
+
 ## Shared Foundation, Different Surfaces
 
 The public app and the studio app should not be visually identical.
