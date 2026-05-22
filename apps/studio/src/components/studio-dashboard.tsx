@@ -1046,6 +1046,29 @@ function AssetAdmin({ data }: { data: StudioDashboardData }) {
     () => new Map(products.map((product) => [product.id, product])),
     [products],
   );
+  const [query, setQuery] = useState("");
+  const [selectedAssetId, setSelectedAssetId] = useState(
+    data.productAssets[0]?.id ?? "",
+  );
+  const filteredAssets = data.productAssets.filter((asset) => {
+    const product = productsById.get(asset.productId);
+
+    return [
+      product?.displayName ?? "",
+      asset.assetView,
+      asset.assetRole,
+      asset.lensHoodState,
+      asset.approvalStatus,
+      asset.storagePath,
+    ]
+      .join(" ")
+      .toLowerCase()
+      .includes(query.trim().toLowerCase());
+  });
+  const selectedAsset =
+    filteredAssets.find((asset) => asset.id === selectedAssetId) ??
+    filteredAssets[0] ??
+    null;
 
   return (
     <section className="flex h-full min-h-0 flex-col">
@@ -1070,21 +1093,67 @@ function AssetAdmin({ data }: { data: StudioDashboardData }) {
         products={products}
       />
 
-      <div className="min-h-0 flex-1 overflow-y-auto bg-surface p-4">
-        <div className="mx-auto max-w-6xl space-y-3">
+      <div className="grid min-h-0 flex-1 xl:grid-cols-[360px_minmax(0,1fr)]">
+        <div className="flex min-h-0 flex-col border-r border-border bg-surface">
+          <div className="space-y-3 border-b border-border p-4">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="eyebrow">List</p>
+                <h3 className="mt-1 text-xl font-semibold text-ink">Assets</h3>
+              </div>
+              <span className="rounded-md border border-border px-3 py-1 text-xs font-medium text-muted">
+                {filteredAssets.length}/{data.productAssets.length}
+              </span>
+            </div>
+            <TextField label="Search" value={query} onChange={setQuery} />
+          </div>
+
+          <div className="min-h-0 flex-1 overflow-y-auto">
           {data.productAssets.length === 0 ? (
-            <div className="border border-border bg-panel p-4 text-sm text-muted">
+            <div className="p-4 text-sm text-muted">
               No assets tracked yet.
             </div>
+          ) : filteredAssets.length === 0 ? (
+            <div className="p-4 text-sm text-muted">No matching records.</div>
           ) : (
-            data.productAssets.map((asset) => (
-              <AssetEditorCard
-                key={buildAssetKey(asset)}
-                asset={asset}
-                products={products}
-                product={productsById.get(asset.productId) ?? null}
-              />
-            ))
+            filteredAssets.map((asset) => {
+              const product = productsById.get(asset.productId) ?? null;
+              const selected = asset.id === selectedAsset?.id;
+
+              return (
+                <button
+                  key={asset.id}
+                  type="button"
+                  className={
+                    selected
+                      ? "w-full border-b border-border bg-panel-strong px-4 py-3 text-left"
+                      : "w-full border-b border-border bg-surface px-4 py-3 text-left hover:bg-panel-strong"
+                  }
+                  onClick={() => setSelectedAssetId(asset.id)}
+                >
+                  <span className="block truncate text-sm font-semibold text-ink">
+                    {product?.displayName ?? "Unknown product"}
+                  </span>
+                  <span className="mt-1 block truncate text-xs text-muted">
+                    {asset.assetView} / {asset.lensHoodState} / {asset.approvalStatus}
+                  </span>
+                </button>
+              );
+            })
+          )}
+          </div>
+        </div>
+
+        <div className="min-h-0 min-w-0 overflow-y-auto bg-background">
+          {selectedAsset ? (
+            <AssetEditorCard
+              key={buildAssetKey(selectedAsset)}
+              asset={selectedAsset}
+              products={products}
+              product={productsById.get(selectedAsset.productId) ?? null}
+            />
+          ) : (
+            <div className="p-4 text-sm text-muted">Select a record to edit.</div>
           )}
         </div>
       </div>
@@ -1248,9 +1317,9 @@ function AssetEditorCard({
   }
 
   return (
-    <details className="rounded-md border border-border bg-panel p-5">
+    <details open className="min-h-full bg-surface">
       <summary className="cursor-pointer list-none">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+        <div className="flex flex-col gap-4 border-b border-border px-5 py-4 lg:flex-row lg:items-start lg:justify-between">
           <div className="flex gap-4">
             <div className="h-24 w-24 shrink-0 overflow-hidden rounded-md border border-border bg-panel-strong">
               <Image
@@ -1300,7 +1369,7 @@ function AssetEditorCard({
         </div>
       </summary>
 
-      <div className="mt-5 space-y-4">
+      <div className="space-y-4 p-5">
         <AssetFormFields form={form} setForm={setForm} products={products} />
         {notice ? <NoticeBanner notice={notice} /> : null}
       </div>
@@ -1722,6 +1791,27 @@ function MountConversionAdmin({
   adapterMountEdgesByConversionId: Map<string, string[]>;
 }) {
   const [createOpen, setCreateOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [selectedConversionId, setSelectedConversionId] = useState(
+    data.mountConversions[0]?.id ?? "",
+  );
+  const filteredConversions = data.mountConversions.filter((conversion) => {
+    const bodyMount = mountsById.get(conversion.bodyMountId) ?? null;
+    const lensMount = mountsById.get(conversion.lensMountId) ?? null;
+
+    return [
+      conversion.preferredDisplayName ?? "",
+      formatGenericConversion(bodyMount, lensMount),
+    ]
+      .join(" ")
+      .toLowerCase()
+      .includes(query.trim().toLowerCase());
+  });
+  const selectedConversion =
+    filteredConversions.find((conversion) => conversion.id === selectedConversionId) ??
+    filteredConversions[0] ??
+    null;
+
   return (
     <section className="flex h-full min-h-0 flex-col">
       <div className="flex h-12 shrink-0 items-center justify-between border-b border-border bg-surface px-4">
@@ -1745,9 +1835,58 @@ function MountConversionAdmin({
         mountsById={mountsById}
       />
 
-      <div className="min-h-0 flex-1 overflow-y-auto bg-surface p-4">
-        <div className="mx-auto max-w-6xl space-y-4">
-          {data.mountConversions.map((conversion) => {
+      <div className="grid min-h-0 flex-1 xl:grid-cols-[360px_minmax(0,1fr)]">
+        <div className="flex min-h-0 flex-col border-r border-border bg-surface">
+          <div className="space-y-3 border-b border-border p-4">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="eyebrow">List</p>
+                <h3 className="mt-1 text-xl font-semibold text-ink">Conversions</h3>
+              </div>
+              <span className="rounded-md border border-border px-3 py-1 text-xs font-medium text-muted">
+                {filteredConversions.length}/{data.mountConversions.length}
+              </span>
+            </div>
+            <TextField label="Search" value={query} onChange={setQuery} />
+          </div>
+
+          <div className="min-h-0 flex-1 overflow-y-auto">
+            {filteredConversions.length === 0 ? (
+              <div className="p-4 text-sm text-muted">No matching records.</div>
+            ) : (
+              filteredConversions.map((conversion) => {
+                const bodyMount = mountsById.get(conversion.bodyMountId) ?? null;
+                const lensMount = mountsById.get(conversion.lensMountId) ?? null;
+                const selected = conversion.id === selectedConversion?.id;
+
+                return (
+                  <button
+                    key={conversion.id}
+                    type="button"
+                    className={
+                      selected
+                        ? "w-full border-b border-border bg-panel-strong px-4 py-3 text-left"
+                        : "w-full border-b border-border bg-surface px-4 py-3 text-left hover:bg-panel-strong"
+                    }
+                    onClick={() => setSelectedConversionId(conversion.id)}
+                  >
+                    <span className="block truncate text-sm font-semibold text-ink">
+                      {conversion.preferredDisplayName ??
+                        formatGenericConversion(bodyMount, lensMount)}
+                    </span>
+                    <span className="mt-1 block truncate text-xs text-muted">
+                      {conversion.theoreticalExtensionMm ?? "Unknown"} mm extension
+                    </span>
+                  </button>
+                );
+              })
+            )}
+          </div>
+        </div>
+
+        <div className="min-h-0 min-w-0 overflow-y-auto bg-background">
+          {selectedConversion ? (() => {
+            const conversion = selectedConversion;
             const linkedAdapterProductIds =
               adapterMountEdgesByConversionId.get(conversion.id) ?? [];
             const defaultAdapterProductId =
@@ -1769,7 +1908,9 @@ function MountConversionAdmin({
                 defaultAdapterProductId={defaultAdapterProductId}
               />
             );
-          })}
+          })() : (
+            <div className="p-4 text-sm text-muted">Select a conversion to edit.</div>
+          )}
         </div>
       </div>
     </section>
@@ -2066,8 +2207,8 @@ function MountConversionEditorCard({
   }
 
   return (
-    <div className="rounded-md border border-border bg-panel p-5">
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+    <div className="min-h-full bg-surface">
+      <div className="flex flex-col gap-3 border-b border-border px-5 py-4 lg:flex-row lg:items-start lg:justify-between">
         <div>
           <p className="eyebrow">Conversion</p>
           <h3 className="mt-2 text-lg font-semibold text-ink">
@@ -2105,7 +2246,7 @@ function MountConversionEditorCard({
         </div>
       </div>
 
-      <div className="mt-5 grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 p-5 md:grid-cols-2">
         <MountSelectionField
           label="Body mount"
           value={form.bodyMountId}
@@ -2124,7 +2265,7 @@ function MountConversionEditorCard({
         />
       </div>
 
-      <div className="mt-4 grid gap-4 md:grid-cols-[minmax(0,1fr)_180px]">
+      <div className="grid gap-4 px-5 pb-5 md:grid-cols-[minmax(0,1fr)_180px]">
         <label className="space-y-2">
           <span className="eyebrow">Display name</span>
           <input
@@ -2159,7 +2300,7 @@ function MountConversionEditorCard({
         </label>
       </div>
 
-      <div className="mt-4">
+      <div className="px-5 pb-5">
         <AdapterChecklist
           adapters={adapters}
           linkedAdapterProductIds={form.linkedAdapterProductIds}
@@ -2183,7 +2324,7 @@ function MountConversionEditorCard({
         />
       </div>
 
-      <div className="mt-4">
+      <div className="px-5 pb-5">
         <SelectionCard
           label="Default real adapter"
           value={form.defaultAdapterProductId}
@@ -2201,7 +2342,7 @@ function MountConversionEditorCard({
         />
       </div>
 
-      {notice ? <div className="mt-4"><NoticeBanner notice={notice} /></div> : null}
+      {notice ? <div className="px-5 pb-5"><NoticeBanner notice={notice} /></div> : null}
     </div>
   );
 }
